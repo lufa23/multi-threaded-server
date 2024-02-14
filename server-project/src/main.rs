@@ -1,9 +1,7 @@
 use std::{
     fs,
-    thread,
     io::{prelude::*, BufReader},
     net::{TcpListener, TcpStream},
-    time::Duration,
     };
     use hello::ThreadPool;
 
