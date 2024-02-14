@@ -8,7 +8,7 @@ pub struct ThreadPool {
     sender: mpsc::Sender<Job>,
 }
 
-struct Job;
+type Job =Box<dyn FnOnce() + Send +'static>;
 
 impl ThreadPool {
     /// Create a new ThreadPool with the specified number of threads.
@@ -42,14 +42,13 @@ impl ThreadPool {
     where
         F: FnOnce() + Send + 'static,
     {
-        // Move ownership of the closure into the thread
-        let handle = thread::spawn(|| {
-            f();
-        });
+        let job = Box::new(f);
+
+        self.sender.send(job).unwrap();
+        }
         // Collect the JoinHandle so the thread doesn't get dropped prematurely
     }
 
-}
 
     struct Worker {
         id: usize,
@@ -61,8 +60,14 @@ impl ThreadPool {
             id: usize,
             receiver: Arc<Mutex<mpsc::Receiver<Job>>>,
         ) -> Worker {
-            let thread = thread::spawn(|| {
-                receiver;
+            let thread = thread::spawn(move || loop{
+                let job = receiver
+                .lock()
+                .unwrap()
+                .recv()
+                .unwrap();
+            println!("Worker  {id} got a job, executing..");
+            job();
             });
 
             Worker {id, thread}

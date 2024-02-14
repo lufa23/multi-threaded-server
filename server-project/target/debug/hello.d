@@ -1,1 +1,1 @@
-/home/usuario/Desktop/rust/multi-threaded-server/server-project/target/debug/hello: /home/usuario/Desktop/rust/multi-threaded-server/server-project/src/main.rs
+/home/usuario/Desktop/rust/multi-threaded-server/server-project/target/debug/hello: /home/usuario/Desktop/rust/multi-threaded-server/server-project/src/lib.rs /home/usuario/Desktop/rust/multi-threaded-server/server-project/src/main.rs
